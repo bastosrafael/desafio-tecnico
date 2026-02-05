@@ -21,14 +21,14 @@ O objetivo deste desafio Ã© demonstrar a capacidade de modernizar uma aplicaÃ
  â”‚   â””â”€â”€ workflows/
  â”‚       â””â”€â”€ ci-cd.yaml    # Pipeline de CI/CD para build, teste e push da imagem Docker
  â”œâ”€â”€ scripts/              # Scripts de automaÃ§Ã£o
- â”‚   â””â”€â”€ deploy.sh         # Script Bash para automatizar o deploy local no Minikube
+ â”‚   â””â”€â”€ deploy.sh         # Script Bash para automatizar o deploy local no Kind/Minikube
  â”œâ”€â”€ INCIDENT.md           # Documento de resposta a um incidente simulado
  â””â”€â”€ README.md             # Este arquivo: VisÃ£o geral e instruÃ§Ãµes do projeto
 ```
 
 ## Como Executar Localmente
 
-Para executar este projeto em seu ambiente local, siga o guia detalhado em `local_execution_guide.md`. Este guia cobre a instalaÃ§Ã£o de prÃ©-requisitos, a execuÃ§Ã£o da aplicaÃ§Ã£o, a containerizaÃ§Ã£o com Docker e a implantaÃ§Ã£o em um cluster Kubernetes local (Minikube).
+Para executar este projeto em seu ambiente local, siga o guia detalhado em `local_execution_guide.md`. Este guia cobre a instalaÃ§Ã£o de prÃ©-requisitos, a execuÃ§Ã£o da aplicaÃ§Ã£o, a containerizaÃ§Ã£o com Docker e a implantaÃ§Ã£o em um cluster Kubernetes local (Kind/Minikube).
 
 ## Partes do Desafio Abordadas
 
@@ -36,7 +36,7 @@ Para executar este projeto em seu ambiente local, siga o guia detalhado em `loca
 
 -   **Dockerfile**: Utiliza multi-stage build para criar uma imagem leve e segura.
 -   **UsuÃ¡rio nÃ£o-root**: A aplicaÃ§Ã£o roda como um usuÃ¡rio nÃ£o-root (`appuser`) dentro do container.
--   **Versionamento**: A imagem Ã© versionada com tags semÃ¢nticas (ex: `seu-usuario-docker/desafio-devops-app:1.0.0`).
+-   **Versionamento**: A imagem Ã© versionada com tags semÃ¢nticas (ex: `bastosrafael/desafio-devops-app:1.0.0`).
 
 ### Parte 2 â€“ CI/CD
 
@@ -55,7 +55,7 @@ Para executar este projeto em seu ambiente local, siga o guia detalhado em `loca
 
 ### Parte 5 â€“ AutomaÃ§Ã£o
 
--   **Script Bash**: Um script `deploy.sh` automatiza o processo de build da imagem Docker, aplicaÃ§Ã£o dos manifestos Kubernetes e verificaÃ§Ã£o do deploy no Minikube.
+-   **Script Bash**: Um script `deploy.sh` automatiza o processo de build da imagem Docker, aplicaÃ§Ã£o dos manifestos Kubernetes e verificaÃ§Ã£o do deploy no Kind/Minikube.
 
 ### Parte 6 â€“ Incidente Simulado
 
@@ -128,6 +128,7 @@ Versionamento:
 Coloque aqui os prints/logs do GitHub Actions:
 - docs/pipeline-logs/github-actions-run.png
 - docs/pipeline-logs/sonarcloud-success.png
+
 
 
 
