@@ -123,4 +123,10 @@ Logs/prints do pipeline:
 Versionamento:
 - Em tags Git (vX.Y.Z), usa a versao X.Y.Z
 - Em push normal, usa 1.0.<run_number> e latest
+## Evidencias do Pipeline
+
+Coloque aqui os prints/logs do GitHub Actions:
+- docs/pipeline-logs/github-actions-run.png
+- docs/pipeline-logs/sonarcloud-success.png
+
 
