@@ -105,9 +105,20 @@ Dashboard:
 
 O pipeline (GitHub Actions) realiza:
 - Build e testes (dummy)
-- Analise de codigo (SonarQube simulado)
+- Analise de codigo (SonarCloud real)
 - Build e push da imagem Docker
 - Deploy automatizado em cluster Kind no runner
+
+SonarCloud:
+- Necessario criar projeto no SonarCloud e configurar os secrets no GitHub:
+  - SONAR_TOKEN
+  - SONAR_ORG
+  - SONAR_PROJECT_KEY
+- O scanner usa o arquivo `sonar-project.properties`.
+
+Logs/prints do pipeline:
+- Salvar evidencias em `docs/pipeline-logs/`
+- Exemplo: `docs/pipeline-logs/github-actions-run.png`
 
 Versionamento:
 - Em tags Git (vX.Y.Z), usa a versao X.Y.Z

@@ -31,8 +31,15 @@ jobs:
       - name: Run unit tests (dummy)
         run: echo "Running dummy unit tests..."
 
-      - name: SonarQube Code Analysis (Simulated)
-        run: echo "Simulating SonarQube analysis..."
+      - name: SonarCloud Code Analysis
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=${{ secrets.SONAR_ORG }}
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.sources=app
 
       - name: Set image version
         run: |
