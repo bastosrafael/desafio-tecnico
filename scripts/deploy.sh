@@ -2,7 +2,7 @@
 set -euo pipefail
 
 MODE="${1:-}"  # kind|minikube|auto
-IMAGE_NAME="rafaelbastos/desafio-devops-app"
+IMAGE_NAME="bastosrafael/desafio-devops-app"
 VERSION="${VERSION:-1.0.0}"
 
 if [ -z "$MODE" ] || [ "$MODE" = "auto" ]; then

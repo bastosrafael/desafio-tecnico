@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: desafio-devops-app-deployment
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: desafio-devops-app
-        image: rafaelbastos/desafio-devops-app:1.0.0
+        image: bastosrafael/desafio-devops-app:1.0.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000

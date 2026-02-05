@@ -130,3 +130,4 @@ Coloque aqui os prints/logs do GitHub Actions:
 - docs/pipeline-logs/sonarcloud-success.png
 
 
+

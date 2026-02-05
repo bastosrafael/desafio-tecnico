@@ -60,7 +60,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t rafaelbastos/desafio-devops-app:${{ env.VERSION }} -t rafaelbastos/desafio-devops-app:latest .
+          docker build -t bastosrafael/desafio-devops-app:${{ env.VERSION }} -t bastosrafael/desafio-devops-app:latest .
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -70,8 +70,8 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push rafaelbastos/desafio-devops-app:${{ env.VERSION }}
-          docker push rafaelbastos/desafio-devops-app:latest
+          docker push bastosrafael/desafio-devops-app:${{ env.VERSION }}
+          docker push bastosrafael/desafio-devops-app:latest
 
       - name: Create Kind cluster
         uses: helm/kind-action@v1.10.0
@@ -80,10 +80,10 @@ jobs:
 
       - name: Load image into Kind
         run: |
-          kind load docker-image rafaelbastos/desafio-devops-app:${{ env.VERSION }} --name desafio-devops
+          kind load docker-image bastosrafael/desafio-devops-app:${{ env.VERSION }} --name desafio-devops
 
       - name: Deploy to Kind
         run: |
           kubectl apply -f k8s/
-          kubectl set image deployment/desafio-devops-app-deployment desafio-devops-app=rafaelbastos/desafio-devops-app:${{ env.VERSION }}
+          kubectl set image deployment/desafio-devops-app-deployment desafio-devops-app=bastosrafael/desafio-devops-app:${{ env.VERSION }}
           kubectl rollout status deployment/desafio-devops-app-deployment
