@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: desafio-devops-app-deployment
+  labels:
+    app: desafio-devops-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: desafio-devops-app
+  template:
+    metadata:
+      labels:
+        app: desafio-devops-app
+    spec:
+      containers:
+      - name: desafio-devops-app
+        image: rafaelbastos/desafio-devops-app:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        - containerPort: 8000
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
