@@ -1,55 +1,74 @@
-name: CI/CD Pipeline
+﻿name: CI/CD Pipeline
 
 on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - main
 
 jobs:
-  build-and-deploy:
+  build-test-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r app/requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r app/requirements.txt
 
-    - name: Run unit tests (dummy)
-      run: echo "Running dummy unit tests..."
-      # Em um cenário real, você teria um comando como: python -m pytest app/tests/
+      - name: Run unit tests (dummy)
+        run: echo "Running dummy unit tests..."
 
-    - name: SonarQube Code Analysis (Simulated)
-      run: echo "Simulating SonarQube analysis..."
-      # Em um cenário real, você integraria com SonarCloud ou um SonarQube local
-      # Ex: sonar-scanner -Dsonar.projectKey=my-app -Dsonar.sources=.
+      - name: SonarQube Code Analysis (Simulated)
+        run: echo "Simulating SonarQube analysis..."
 
-    - name: Build Docker image
-      run: docker build -t rafaelbastos/desafio-devops-app:${{ github.run_number }} -t rafaelbastos/desafio-devops-app:latest .
+      - name: Set image version
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION="1.0.${GITHUB_RUN_NUMBER}"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Docker image
+        run: |
+          docker build -t rafaelbastos/desafio-devops-app:${{ env.VERSION }} -t rafaelbastos/desafio-devops-app:latest .
 
-    - name: Push Docker image
-      run: |
-        docker push rafaelbastos/desafio-devops-app:${{ github.run_number }}
-        docker push rafaelbastos/desafio-devops-app:latest
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Deploy to Kubernetes (Simulated)
-      run: echo "Simulating deploy to Kubernetes..."
-      # Em um cenário real, você usaria kubectl para aplicar os manifestos
-      # Ex: kubectl apply -f k8s/
+      - name: Push Docker image
+        run: |
+          docker push rafaelbastos/desafio-devops-app:${{ env.VERSION }}
+          docker push rafaelbastos/desafio-devops-app:latest
+
+      - name: Create Kind cluster
+        uses: helm/kind-action@v1.10.0
+        with:
+          cluster_name: desafio-devops
+
+      - name: Load image into Kind
+        run: |
+          kind load docker-image rafaelbastos/desafio-devops-app:${{ env.VERSION }} --name desafio-devops
+
+      - name: Deploy to Kind
+        run: |
+          kubectl apply -f k8s/
+          kubectl set image deployment/desafio-devops-app-deployment desafio-devops-app=rafaelbastos/desafio-devops-app:${{ env.VERSION }}
+          kubectl rollout status deployment/desafio-devops-app-deployment

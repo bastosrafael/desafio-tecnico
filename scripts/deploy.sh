@@ -1,27 +1,49 @@
-#!/bin/bash
+﻿#!/bin/bash
+set -euo pipefail
 
-# Script para automatizar o deploy da aplicação no Minikube
+MODE="${1:-}"  # kind|minikube|auto
+IMAGE_NAME="rafaelbastos/desafio-devops-app"
+VERSION="${VERSION:-1.0.0}"
 
-# Verifica se o Minikube está rodando
-if ! minikube status | grep -q "Running"; then
-  echo "Minikube não está rodando. Iniciando..."
-  minikube start
+if [ -z "$MODE" ] || [ "$MODE" = "auto" ]; then
+  if command -v kind >/dev/null 2>&1; then
+    MODE="kind"
+  else
+    MODE="minikube"
+  fi
 fi
 
-# Constrói a imagem Docker
+echo "Mode: $MODE"
+
 echo "Construindo a imagem Docker..."
-docker build -t rafaelbastos/desafio-devops-app:latest .
+docker build -t ${IMAGE_NAME}:${VERSION} -t ${IMAGE_NAME}:latest .
 
-# Aplica os manifestos Kubernetes
-echo "Aplicando manifestos Kubernetes..."
-kubectl apply -f k8s/
+if [ "$MODE" = "kind" ]; then
+  CLUSTER_NAME="${KIND_CLUSTER:-desafio-devops}"
+  if ! kind get clusters | grep -q "^${CLUSTER_NAME}$"; then
+    echo "Kind nao esta rodando. Criando cluster ${CLUSTER_NAME}..."
+    kind create cluster --name ${CLUSTER_NAME}
+  fi
 
-# Espera o deployment estar pronto
-echo "Aguardando o deployment estar pronto..."
-kubectl rollout status deployment/desafio-devops-app-deployment
+  echo "Carregando imagem no Kind..."
+  kind load docker-image ${IMAGE_NAME}:${VERSION} --name ${CLUSTER_NAME}
 
-# Exibe a URL da aplicação
-echo "Aplicação deployada! Acesse em:"
-minikube service desafio-devops-app-service --url
+  echo "Aplicando manifestos Kubernetes..."
+  kubectl apply -f k8s/
+  kubectl set image deployment/desafio-devops-app-deployment desafio-devops-app=${IMAGE_NAME}:${VERSION}
+  kubectl rollout status deployment/desafio-devops-app-deployment
 
-echo "Deploy concluído com sucesso!"
+  echo "Deploy concluido no Kind."
+else
+  if ! minikube status | grep -q "Running"; then
+    echo "Minikube nao esta rodando. Iniciando..."
+    minikube start
+  fi
+
+  echo "Aplicando manifestos Kubernetes..."
+  kubectl apply -f k8s/
+  kubectl rollout status deployment/desafio-devops-app-deployment
+
+  echo "Aplicacao deployada! Acesse em:"
+  minikube service desafio-devops-app-service --url
+fi

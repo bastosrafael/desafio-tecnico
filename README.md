@@ -1,108 +1,115 @@
-# Desafio Técnico DevOps
+﻿# Desafio TÃ©cnico DevOps
 
-Este repositório contém a solução proposta para o Desafio Técnico DevOps, abrangendo as áreas de Containerização, CI/CD, Kubernetes, Observabilidade, Automação e Resposta a Incidentes.
+Este repositÃ³rio contÃ©m a soluÃ§Ã£o proposta para o Desafio TÃ©cnico DevOps, abrangendo as Ã¡reas de ContainerizaÃ§Ã£o, CI/CD, Kubernetes, Observabilidade, AutomaÃ§Ã£o e Resposta a Incidentes.
 
-## Visão Geral do Projeto
+## VisÃ£o Geral do Projeto
 
-O objetivo deste desafio é demonstrar a capacidade de modernizar uma aplicação backend simples, tornando-a containerizada, automatizada e observável. A aplicação de exemplo é um serviço Flask em Python que expõe endpoints de `/health`, `/ready` e `/metrics` (compatível com Prometheus).
+O objetivo deste desafio Ã© demonstrar a capacidade de modernizar uma aplicaÃ§Ã£o backend simples, tornando-a containerizada, automatizada e observÃ¡vel. A aplicaÃ§Ã£o de exemplo Ã© um serviÃ§o Flask em Python que expÃµe endpoints de `/health`, `/ready` e `/metrics` (compatÃ­vel com Prometheus).
 
-## Estrutura do Repositório
+## Estrutura do RepositÃ³rio
 
 ```
  desafio-devops/
- ├── app/                  # Código-fonte da aplicação backend (Python Flask)
- │   ├── main.py           # Aplicação Flask com endpoints de saúde e métricas
- │   └── requirements.txt  # Dependências Python da aplicação
- ├── Dockerfile            # Dockerfile para construir a imagem da aplicação (multi-stage build)
- ├── k8s/                  # Manifestos Kubernetes para Deployment e Service
- │   ├── deployment.yaml   # Define o Deployment da aplicação no Kubernetes
- │   └── service.yaml      # Define o Service para expor a aplicação no Kubernetes
- ├── .github/              # Configuração do GitHub Actions (pipeline CI/CD)
- │   └── workflows/
- │       └── ci-cd.yaml    # Pipeline de CI/CD para build, teste e push da imagem Docker
- ├── scripts/              # Scripts de automação
- │   └── deploy.sh         # Script Bash para automatizar o deploy local no Minikube
- ├── INCIDENT.md           # Documento de resposta a um incidente simulado
- └── README.md             # Este arquivo: Visão geral e instruções do projeto
+ â”œâ”€â”€ app/                  # CÃ³digo-fonte da aplicaÃ§Ã£o backend (Python Flask)
+ â”‚   â”œâ”€â”€ main.py           # AplicaÃ§Ã£o Flask com endpoints de saÃºde e mÃ©tricas
+ â”‚   â””â”€â”€ requirements.txt  # DependÃªncias Python da aplicaÃ§Ã£o
+ â”œâ”€â”€ Dockerfile            # Dockerfile para construir a imagem da aplicaÃ§Ã£o (multi-stage build)
+ â”œâ”€â”€ k8s/                  # Manifestos Kubernetes para Deployment e Service
+ â”‚   â”œâ”€â”€ deployment.yaml   # Define o Deployment da aplicaÃ§Ã£o no Kubernetes
+ â”‚   â””â”€â”€ service.yaml      # Define o Service para expor a aplicaÃ§Ã£o no Kubernetes
+ â”œâ”€â”€ .github/              # ConfiguraÃ§Ã£o do GitHub Actions (pipeline CI/CD)
+ â”‚   â””â”€â”€ workflows/
+ â”‚       â””â”€â”€ ci-cd.yaml    # Pipeline de CI/CD para build, teste e push da imagem Docker
+ â”œâ”€â”€ scripts/              # Scripts de automaÃ§Ã£o
+ â”‚   â””â”€â”€ deploy.sh         # Script Bash para automatizar o deploy local no Minikube
+ â”œâ”€â”€ INCIDENT.md           # Documento de resposta a um incidente simulado
+ â””â”€â”€ README.md             # Este arquivo: VisÃ£o geral e instruÃ§Ãµes do projeto
 ```
 
 ## Como Executar Localmente
 
-Para executar este projeto em seu ambiente local, siga o guia detalhado em `local_execution_guide.md`. Este guia cobre a instalação de pré-requisitos, a execução da aplicação, a containerização com Docker e a implantação em um cluster Kubernetes local (Minikube).
+Para executar este projeto em seu ambiente local, siga o guia detalhado em `local_execution_guide.md`. Este guia cobre a instalaÃ§Ã£o de prÃ©-requisitos, a execuÃ§Ã£o da aplicaÃ§Ã£o, a containerizaÃ§Ã£o com Docker e a implantaÃ§Ã£o em um cluster Kubernetes local (Minikube).
 
 ## Partes do Desafio Abordadas
 
-### Parte 1 – Containerização
+### Parte 1 â€“ ContainerizaÃ§Ã£o
 
 -   **Dockerfile**: Utiliza multi-stage build para criar uma imagem leve e segura.
--   **Usuário não-root**: A aplicação roda como um usuário não-root (`appuser`) dentro do container.
--   **Versionamento**: A imagem é versionada com tags semânticas (ex: `seu-usuario-docker/desafio-devops-app:1.0.0`).
+-   **UsuÃ¡rio nÃ£o-root**: A aplicaÃ§Ã£o roda como um usuÃ¡rio nÃ£o-root (`appuser`) dentro do container.
+-   **Versionamento**: A imagem Ã© versionada com tags semÃ¢nticas (ex: `seu-usuario-docker/desafio-devops-app:1.0.0`).
 
-### Parte 2 – CI/CD
+### Parte 2 â€“ CI/CD
 
--   **GitHub Actions**: Implementa um pipeline de CI/CD para automatizar o build, testes (dummy), análise de código (simulada) e push da imagem Docker para um registry público.
+-   **GitHub Actions**: Implementa um pipeline de CI/CD para automatizar o build, testes (dummy), anÃ¡lise de cÃ³digo (simulada) e push da imagem Docker para um registry pÃºblico.
 
-### Parte 3 – Kubernetes
+### Parte 3 â€“ Kubernetes
 
--   **Manifestos**: `deployment.yaml` e `service.yaml` para implantar a aplicação.
--   **Probes**: Configuração de `livenessProbe` e `readinessProbe` para garantir a saúde e disponibilidade da aplicação.
--   **Recursos**: Definição de `requests` e `limits` para CPU e memória.
+-   **Manifestos**: `deployment.yaml` e `service.yaml` para implantar a aplicaÃ§Ã£o.
+-   **Probes**: ConfiguraÃ§Ã£o de `livenessProbe` e `readinessProbe` para garantir a saÃºde e disponibilidade da aplicaÃ§Ã£o.
+-   **Recursos**: DefiniÃ§Ã£o de `requests` e `limits` para CPU e memÃ³ria.
 
-### Parte 4 – Observabilidade
+### Parte 4 â€“ Observabilidade
 
--   **Métricas**: A aplicação expõe métricas compatíveis com Prometheus no endpoint `/metrics`.
--   **Configuração**: O guia `local_execution_guide.md` demonstra como configurar o Prometheus e Grafana localmente para coletar e visualizar essas métricas.
+-   **MÃ©tricas**: A aplicaÃ§Ã£o expÃµe mÃ©tricas compatÃ­veis com Prometheus no endpoint `/metrics`.
+-   **ConfiguraÃ§Ã£o**: O guia `local_execution_guide.md` demonstra como configurar o Prometheus e Grafana localmente para coletar e visualizar essas mÃ©tricas.
 
-### Parte 5 – Automação
+### Parte 5 â€“ AutomaÃ§Ã£o
 
--   **Script Bash**: Um script `deploy.sh` automatiza o processo de build da imagem Docker, aplicação dos manifestos Kubernetes e verificação do deploy no Minikube.
+-   **Script Bash**: Um script `deploy.sh` automatiza o processo de build da imagem Docker, aplicaÃ§Ã£o dos manifestos Kubernetes e verificaÃ§Ã£o do deploy no Minikube.
 
-### Parte 6 – Incidente Simulado
+### Parte 6 â€“ Incidente Simulado
 
--   **INCIDENT.md**: Contém a análise detalhada de um incidente simulado, incluindo investigação, ferramentas, possíveis causas, estratégia de rollback e prevenção.
+-   **INCIDENT.md**: ContÃ©m a anÃ¡lise detalhada de um incidente simulado, incluindo investigaÃ§Ã£o, ferramentas, possÃ­veis causas, estratÃ©gia de rollback e prevenÃ§Ã£o.
 
-## Contribuição
+## ContribuiÃ§Ã£o
 
-Sinta-se à vontade para explorar, testar e sugerir melhorias. Este projeto é um ponto de partida para o desafio DevOps.
+Sinta-se Ã  vontade para explorar, testar e sugerir melhorias. Este projeto Ã© um ponto de partida para o desafio DevOps.
+## Execucao com Kind
 
-## Observabilidade (Prometheus/Grafana) - Execucao local
-
-- Metrics OK: http://localhost:8000/metrics (via `kubectl port-forward svc/desafio-devops-app-service 8000:8000`)
-- Prometheus UI: http://localhost:9090 (via `kubectl port-forward svc/prometheus 9090:9090`)
-- Grafana UI: http://localhost:3000 (via `kubectl port-forward svc/grafana 3000:3000`)
-
-Se o Prometheus abrir com warning de "time drift", sincronize o relogio no WSL:
+Passos rapidos para subir no Kind:
 
 ```bash
-sudo hwclock -s
+kind create cluster --name desafio-devops
+VERSION=1.0.0 ./scripts/deploy.sh kind
 ```
 
-Para validar o scrape no Prometheus:
+Para acessar a aplicacao:
 
 ```bash
-curl -s http://localhost:9090/api/v1/targets | head -n 80
+kubectl port-forward svc/desafio-devops-app-service 5000:80
 ```
 
-## Observability - Prometheus e Grafana
+## Observabilidade (Prometheus/Grafana)
 
-### Aviso de "time drift" no Prometheus
-Esse aviso aparece porque o horario do Prometheus (rodando no WSL/Kubernetes) esta diferente do horario do seu navegador (Windows). Isso nao impede as consultas, mas pode causar resultados estranhos em janelas de tempo curtas.
+Port-forwards:
 
-Como resolver:
-- Reabrir o WSL: `wsl --shutdown` no Windows e abrir o WSL de novo.
-- Ou ajustar o relogio do WSL: `sudo date -s "$(date -u +"%Y-%m-%d %H:%M:%S")"`.
-- Opcional: marcar "Use local time" na UI do Prometheus.
+```bash
+kubectl port-forward svc/desafio-devops-app-service 8000:8000
+kubectl port-forward svc/prometheus 9090:9090
+kubectl port-forward svc/grafana 3000:3000
+```
 
-### O que mostram os graficos do dashboard
-- Requests per second (all): total de requisicoes por segundo (RPS).
-- Requests per second by endpoint/status: RPS separado por endpoint e status HTTP.
-- Latency p95: latencia no percentil 95 (95% das requisicoes abaixo desse tempo).
-- Latency avg: latencia media das requisicoes.
+URLs:
+- Metrics: http://localhost:8000/metrics
+- Prometheus: http://localhost:9090
+- Grafana: http://localhost:3000 (admin/admin)
 
-### Provisionamento automatico do dashboard
-O dashboard e provisionado no Grafana via ConfigMap, sem import manual.
-Arquivos:
-- k8s/grafana-dashboard.yaml
-- k8s/grafana-dashboard-provisioning.yaml
-- k8s/grafana-deployment.yaml
-- grafana-dashboard.json (JSON original para o desafio)
+Dashboard:
+- JSON do dashboard: grafana-dashboard.json
+- Provisionamento automatico via ConfigMap:
+  - k8s/grafana-dashboard.yaml
+  - k8s/grafana-dashboard-provisioning.yaml
+  - k8s/grafana-deployment.yaml
+
+## CI/CD
+
+O pipeline (GitHub Actions) realiza:
+- Build e testes (dummy)
+- Analise de codigo (SonarQube simulado)
+- Build e push da imagem Docker
+- Deploy automatizado em cluster Kind no runner
+
+Versionamento:
+- Em tags Git (vX.Y.Z), usa a versao X.Y.Z
+- Em push normal, usa 1.0.<run_number> e latest
+
